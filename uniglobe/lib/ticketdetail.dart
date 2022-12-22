@@ -554,7 +554,10 @@ class _ticketdetailState extends State<ticketdetail> {
                                                     },
                                                   ),
                                                 ),
-                                                widget.type != "Complete"
+                                                // widget.type != "Complete"
+                                                //     ?
+                                                ticketinform['ticked_status'] ==
+                                                        'In Progress'
                                                     ? Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
@@ -573,144 +576,135 @@ class _ticketdetailState extends State<ticketdetail> {
                                                           ),
                                                         ],
                                                       )
-                                                    : ticketinform[
-                                                                'ticked_status'] ==
-                                                            'In Progress'
-                                                        ? Container(
-                                                            child: Column(
-                                                              children: [
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
-                                                                  child: Row(
-                                                                    children: [
-                                                                      Text(
-                                                                          'Description')
-                                                                    ],
-                                                                  ),
-                                                                ),
-                                                                Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .all(
-                                                                          8.0),
+                                                    : Container(),
+                                                ticketinform['ticked_status'] ==
+                                                        'In Progress'
+                                                    ? Container(
+                                                        child: Column(
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child: Row(
+                                                                children: [
+                                                                  Text(
+                                                                      'Description')
+                                                                ],
+                                                              ),
+                                                            ),
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(8.0),
+                                                              child:
+                                                                  DottedBorder(
+                                                                color: greenn,
+                                                                // gap: 3,
+                                                                strokeWidth: 1,
+                                                                child: Padding(
+                                                                  padding: const EdgeInsets
+                                                                          .only(
+                                                                      bottom:
+                                                                          10,
+                                                                      left: 10),
                                                                   child:
-                                                                      DottedBorder(
-                                                                    color:
-                                                                        greenn,
-                                                                    // gap: 3,
-                                                                    strokeWidth:
-                                                                        1,
-                                                                    child:
-                                                                        Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          bottom:
-                                                                              10,
-                                                                          left:
-                                                                              10),
-                                                                      child:
-                                                                          TextFormField(
-                                                                        controller:
-                                                                            Descriptionctrl,
-                                                                        minLines:
-                                                                            2,
-                                                                        maxLines:
-                                                                            5,
-                                                                        keyboardType:
-                                                                            TextInputType.multiline,
-                                                                        decoration: InputDecoration(
-                                                                            hintText: ticketinform['designation_name'],
-                                                                            // hintStyle: TextStyle(
-                                                                            //     color: Colors.grey),
-                                                                            // border: OutlineInputBorder(
-                                                                            //   borderRadius:
-                                                                            //       BorderRadius.all(
-                                                                            //           Radius.circular(
-                                                                            //               20.0)
-                                                                            //               ),
-                                                                            // ),
-                                                                            border: InputBorder.none),
-                                                                      ),
-                                                                    ),
+                                                                      TextFormField(
+                                                                    controller:
+                                                                        Descriptionctrl,
+                                                                    minLines: 2,
+                                                                    maxLines: 5,
+                                                                    keyboardType:
+                                                                        TextInputType
+                                                                            .multiline,
+                                                                    decoration: InputDecoration(
+                                                                        hintText: ticketinform['designation_name'],
+                                                                        // hintStyle: TextStyle(
+                                                                        //     color: Colors.grey),
+                                                                        // border: OutlineInputBorder(
+                                                                        //   borderRadius:
+                                                                        //       BorderRadius.all(
+                                                                        //           Radius.circular(
+                                                                        //               20.0)
+                                                                        //               ),
+                                                                        // ),
+                                                                        border: InputBorder.none),
                                                                   ),
                                                                 ),
-                                                                SizedBox(
-                                                                  height: 5,
-                                                                ),
-                                                                Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Container(
-                                                                      width: width_ /
+                                                              ),
+                                                            ),
+                                                            SizedBox(
+                                                              height: 5,
+                                                            ),
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Container(
+                                                                  width:
+                                                                      width_ /
                                                                           1.25,
-                                                                      child:
-                                                                          ElevatedButton(
-                                                                        style: ElevatedButton.styleFrom(
-                                                                            primary:
-                                                                                greenn),
-                                                                        onPressed:
-                                                                            (() {
-                                                                          if (dropdownValue !=
-                                                                              null) {
-                                                                            senditmsapi();
-                                                                          }
-                                                                          // Navigator.push(
-                                                                          //   context,
-                                                                          //   MaterialPageRoute(
-                                                                          //       builder: (context) =>
-                                                                          //           ticketdetailandattend()),
-                                                                          // );
-                                                                        }),
-                                                                        child: Text(
-                                                                            'SUBMIT'),
-                                                                      ),
-                                                                    ),
-                                                                  ],
+                                                                  child:
+                                                                      ElevatedButton(
+                                                                    style: ElevatedButton.styleFrom(
+                                                                        primary:
+                                                                            greenn),
+                                                                    onPressed:
+                                                                        (() {
+                                                                      if (dropdownValue !=
+                                                                          null) {
+                                                                        senditmsapi();
+                                                                      }
+                                                                      // Navigator.push(
+                                                                      //   context,
+                                                                      //   MaterialPageRoute(
+                                                                      //       builder: (context) =>
+                                                                      //           ticketdetailandattend()),
+                                                                      // );
+                                                                    }),
+                                                                    child: Text(
+                                                                        'SUBMIT'),
+                                                                  ),
                                                                 ),
                                                               ],
                                                             ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : Column(
+                                                        children: [
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Row(
+                                                              children: [
+                                                                Text('History:',
+                                                                    style: TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontWeight:
+                                                                            FontWeight.bold))
+                                                              ],
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                    .all(8.0),
+                                                            child: Column(
+                                                              children: [
+                                                                Text(
+                                                                  ticketinform[
+                                                                          'comment']
+                                                                      .toString(),
+                                                                )
+                                                              ],
+                                                            ),
                                                           )
-                                                        : Column(
-                                                            children: [
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Row(
-                                                                  children: [
-                                                                    Text(
-                                                                        'History:',
-                                                                        style: TextStyle(
-                                                                            fontSize:
-                                                                                15,
-                                                                            fontWeight:
-                                                                                FontWeight.bold))
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              Padding(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                            .all(
-                                                                        8.0),
-                                                                child: Column(
-                                                                  children: [
-                                                                    Text(
-                                                                      ticketinform[
-                                                                              'comment']
-                                                                          .toString(),
-                                                                    )
-                                                                  ],
-                                                                ),
-                                                              )
-                                                            ],
-                                                          )
+                                                        ],
+                                                      )
                                               ]),
                                             )
                                           ],

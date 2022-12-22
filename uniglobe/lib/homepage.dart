@@ -128,11 +128,9 @@ class _homeState extends State<home> {
                                             const todaysassignedtockets()),
                                   );
                                 } else if (index == 1) {
-                                  Navigator.of(context).pushAndRemoveUntil(
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              totalassignedtickets()),
-                                      (Route<dynamic> route) => false);
+                                  Navigator.of(context).push(MaterialPageRoute(
+                                      builder: (context) =>
+                                          totalassignedtickets()));
                                   // Navigator.push(
                                   //   context,
                                   //   MaterialPageRoute(
