@@ -159,6 +159,7 @@ class _completedticketsState extends State<completedtickets> {
                                                                   MaterialPageRoute(
                                                                       builder: (context) =>
                                                                           ticketdetail(
+                                                                            type:"Complete",
                                                                               ticketNumber: fetchdata[index]['ticket_number'].toString())),
                                                                 );
                                                               },

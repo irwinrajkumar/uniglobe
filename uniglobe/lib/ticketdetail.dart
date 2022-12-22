@@ -22,7 +22,8 @@ import 'package:get/get.dart';
 
 class ticketdetail extends StatefulWidget {
   var ticketNumber;
-  ticketdetail({Key? key, this.ticketNumber}) : super(key: key);
+  var type;
+  ticketdetail({Key? key, this.ticketNumber, this.type}) : super(key: key);
 
   @override
   State<ticketdetail> createState() => _ticketdetailState();
@@ -553,8 +554,7 @@ class _ticketdetailState extends State<ticketdetail> {
                                                     },
                                                   ),
                                                 ),
-                                                ticketinform['ticked_status'] ==
-                                                        'Not Resolved'
+                                                widget.type != "Complete"
                                                     ? Row(
                                                         mainAxisAlignment:
                                                             MainAxisAlignment
