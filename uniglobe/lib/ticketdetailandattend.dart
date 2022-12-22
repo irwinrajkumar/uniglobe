@@ -1,13 +1,18 @@
 // import 'dart:html';
 
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:uniglobe/homepage.dart';
 import 'package:uniglobe/todaysassignedtickets.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 import 'bottomnav.dart';
 import 'changepassword.dart';
 import 'color code.dart';
+import 'end_point.dart';
 import 'myprofile.dart';
 import 'mytickets.dart';
 import 'notifications.dart';
@@ -32,6 +37,77 @@ class _ticketdetailandattendState extends State<ticketdetailandattend> {
   ];
   int _value = 0;
   int _value1 = 0;
+  var init;
+  Future cameraPickerSource(String type) async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+    setState(() {
+      Get.back();
+      if (type == "Scratches4Image") {
+        init.exteriorscratchesImageList.add(imageTemporary);
+      } else if (type == "Scratches1Image") {
+        init.exteriorscratchesSingleImageList.add(imageTemporary);
+      } else {
+        init.clusterMeterImageList.add(imageTemporary);
+      }
+    });
+  }
+
+  Future galaryPickerSource(String type) async {
+    final List<XFile> selectedImages = await ImagePicker().pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      if (type == "Scratches4Image") {
+        init.exteriorscratchesImageList.addAll(selectedImages);
+      } else if (type == "Scratches1Image") {
+        init.exteriorscratchesSingleImageList.addAll(selectedImages);
+      } else {
+        init.clusterMeterImageList.addAll(selectedImages);
+      }
+    }
+
+    setState(() {
+      Get.back();
+    });
+  }
+
+  imagePicker(String type) {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )),
+        padding: EdgeInsets.only(left: 90, top: 12, bottom: 12, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                galaryPickerSource(type);
+              },
+              icon: Icon(
+                Icons.image_outlined,
+                color: Colors.red,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                cameraPickerSource(type);
+              },
+              icon: Icon(
+                Icons.camera_alt_outlined,
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaSize(context);
@@ -247,65 +323,181 @@ class _ticketdetailandattendState extends State<ticketdetailandattend> {
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Row(
-                                        children: [Text('Description')],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: DottedBorder(
-                                        color: greenn,
-                                        // gap: 3,
-                                        strokeWidth: 1,
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              bottom: 10, left: 10),
-                                          child: TextFormField(
-                                            minLines: 2,
-                                            maxLines: 5,
-                                            keyboardType:
-                                                TextInputType.multiline,
-                                            decoration: InputDecoration(
-                                                hintText: '  Type here...',
-                                                // hintStyle: TextStyle(
-                                                //     color: Colors.grey),
-                                                // border: OutlineInputBorder(
-                                                //   borderRadius:
-                                                //       BorderRadius.all(
-                                                //           Radius.circular(
-                                                //               20.0)
-                                                //               ),
-                                                // ),
-                                                border: InputBorder.none),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      height: 40,
-                                    ),
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
+                                      child: Column(children: [
                                         Container(
-                                          width: width_ / 1.25,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                                primary: greenn),
-                                            onPressed: (() {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                    builder: (context) =>
-                                                        home()),
-                                              );
-                                            }),
-                                            child: Text('SUBMIT'),
+                                          padding: EdgeInsets.all(5),
+                                          height: height_ / 4.5,
+                                          decoration: BoxDecoration(
+                                              color: white,
+                                              border: Border.all(
+                                                color: whitegrey,
+                                              ),
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          child: GridView.builder(
+                                            physics: ScrollPhysics(),
+                                            itemCount: (init
+                                                        .clusterMeterImageList
+                                                        .length +
+                                                    1)
+                                                .toInt(),
+                                            scrollDirection: Axis.vertical,
+                                            gridDelegate:
+                                                SliverGridDelegateWithFixedCrossAxisCount(
+                                                    crossAxisCount: 3,
+                                                    crossAxisSpacing: 10,
+                                                    mainAxisSpacing: 5,
+                                                    childAspectRatio: 1.8 / 1),
+                                            itemBuilder: (BuildContext context,
+                                                int index) {
+                                              var item = init
+                                                          .clusterMeterImageList
+                                                          .length >
+                                                      index
+                                                  ? init.clusterMeterImageList[
+                                                      index]
+                                                  : '';
+                                              return item == ''
+                                                  ? InkWell(
+                                                      onTap: () {
+                                                        imagePicker("Odometer");
+                                                      },
+                                                      child: Container(
+                                                          alignment:
+                                                              Alignment.center,
+                                                          padding:
+                                                              EdgeInsets.all(
+                                                                  20),
+                                                          decoration: BoxDecoration(
+                                                              color: whitegrey,
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5))),
+                                                          child: Image.asset(
+                                                            "asset/profile/add_photo.png",
+                                                            height: 40,
+                                                            width: 30,
+                                                            fit: BoxFit.fill,
+                                                          )))
+                                                  : Stack(
+                                                      alignment:
+                                                          Alignment.topRight,
+                                                      children: [
+                                                        InkWell(
+                                                            onTap: () {},
+                                                            child: Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                decoration: BoxDecoration(
+                                                                    color:
+                                                                        whitegrey,
+                                                                    borderRadius:
+                                                                        BorderRadius.all(Radius.circular(
+                                                                            5))),
+                                                                child: item.runtimeType ==
+                                                                        String
+                                                                    ? Image
+                                                                        .network(
+                                                                        API().imageURL +
+                                                                            item,
+                                                                        height:
+                                                                            80,
+                                                                        width:
+                                                                            80,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      )
+                                                                    : Image
+                                                                        .file(
+                                                                        File(item
+                                                                            .path),
+                                                                        height:
+                                                                            80,
+                                                                        width:
+                                                                            80,
+                                                                        fit: BoxFit
+                                                                            .cover,
+                                                                      ))),
+                                                        InkWell(
+                                                            onTap: () {
+                                                              setState(() {
+                                                                init.clusterMeterImageList
+                                                                    .removeAt(
+                                                                        index);
+                                                              });
+                                                            },
+                                                            child: Icon(
+                                                                Icons.clear))
+                                                      ],
+                                                    );
+                                            },
                                           ),
                                         ),
-                                      ],
-                                    ),
+                                      ]),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.all(8.0),
+                                      //   child: Row(
+                                      //     children: [Text('Description')],
+                                      //   ),
+                                      // ),
+                                      // Padding(
+                                      //   padding: const EdgeInsets.all(8.0),
+                                      //   child: DottedBorder(
+                                      //     color: greenn,
+                                      //     // gap: 3,
+                                      //     strokeWidth: 1,
+                                      //     child: Padding(
+                                      //       padding: const EdgeInsets.only(
+                                      //           bottom: 10, left: 10),
+                                      //       child: TextFormField(
+                                      //         minLines: 2,
+                                      //         maxLines: 5,
+                                      //         keyboardType:
+                                      //             TextInputType.multiline,
+                                      //         decoration: InputDecoration(
+                                      //             hintText: '  Type here...',
+                                      //             // hintStyle: TextStyle(
+                                      //             //     color: Colors.grey),
+                                      //             // border: OutlineInputBorder(
+                                      //             //   borderRadius:
+                                      //             //       BorderRadius.all(
+                                      //             //           Radius.circular(
+                                      //             //               20.0)
+                                      //             //               ),
+                                      //             // ),
+                                      //             border: InputBorder.none),
+                                      //       ),
+                                      //     ),
+                                      //   ),
+                                      // ),
+                                      // SizedBox(
+                                      //   height: 40,
+                                      // ),
+                                      // Row(
+                                      //   mainAxisAlignment:
+                                      //       MainAxisAlignment.center,
+                                      //   children: [
+                                      //     Container(
+                                      //       width: width_ / 1.25,
+                                      //       child: ElevatedButton(
+                                      //         style: ElevatedButton.styleFrom(
+                                      //             primary: greenn),
+                                      //         onPressed: (() {
+                                      //           Navigator.push(
+                                      //             context,
+                                      //             MaterialPageRoute(
+                                      //                 builder: (context) =>
+                                      //                     home()),
+                                      //           );
+                                      //         }),
+                                      //         child: Text('SUBMIT'),
+                                      //       ),
+                                      //     ),
+                                      //   ],
+                                      // ),
+                                    )
                                   ],
                                 ),
                               ),

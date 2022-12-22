@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
@@ -8,6 +9,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'bottomnav.dart';
 import 'changepassword.dart';
 import 'color code.dart';
+import 'end_point.dart';
 import 'main.dart';
 import 'myprofile.dart';
 import 'mytickets.dart';
@@ -15,6 +17,8 @@ import 'notifications.dart';
 import 'ticketdetailandattend.dart';
 import 'package:http/http.dart' as http;
 import 'package:dropdown_button2/dropdown_button2.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:get/get.dart';
 
 class ticketdetail extends StatefulWidget {
   var ticketNumber;
@@ -30,7 +34,11 @@ class _ticketdetailState extends State<ticketdetail> {
 
   // List of items in our dropdown menu
   var list = [];
-
+  var init = [];
+  var exteriorscratchesSingleImageList;
+  var inventory = [];
+  var exteriorsList = [];
+  var priviewImageList = [];
   String? dropdownValue;
   var ticketinform;
   var status;
@@ -48,6 +56,7 @@ class _ticketdetailState extends State<ticketdetail> {
       ticketinform = decodeValue['data']['ticket_details'];
       status = decodeValue['data']['ticket_details']['ticked_status'];
       list = decodeValue['data']['status_dropdown'];
+
       print(decodeValue['data']['status_dropdown']);
     });
   }
@@ -84,9 +93,68 @@ class _ticketdetailState extends State<ticketdetail> {
     super.initState();
   }
 
+  Future cameraPickerSource() async {
+    final image = await ImagePicker().pickImage(source: ImageSource.camera);
+    if (image == null) return;
+    final imageTemporary = File(image.path);
+    setState(() {
+      Get.back();
+      priviewImageList.add(imageTemporary);
+    });
+  }
+
+  Future galaryPickerSource() async {
+    final List<XFile> selectedImages = await ImagePicker().pickMultiImage();
+    if (selectedImages.isNotEmpty) {
+      priviewImageList.addAll(selectedImages);
+    }
+
+    setState(() {
+      Get.back();
+    });
+  }
+
+  imagePicker() {
+    Get.bottomSheet(
+      Container(
+        decoration: BoxDecoration(
+            color: white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            )),
+        padding: EdgeInsets.only(left: 90, top: 12, bottom: 12, right: 20),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            IconButton(
+              onPressed: () {
+                galaryPickerSource();
+              },
+              icon: Icon(
+                Icons.image,
+                color: Colors.red,
+              ),
+            ),
+            IconButton(
+              onPressed: () {
+                cameraPickerSource();
+              },
+              icon: Icon(
+                Icons.camera_alt_outlined,
+                color: Colors.red,
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     mediaSize(context);
+
     return Scaffold(
         drawer: DrawerWidget(),
         // resizeToAvoidBottomInset: false,
@@ -138,7 +206,7 @@ class _ticketdetailState extends State<ticketdetail> {
                             padding: const EdgeInsets.only(right: 20, top: 20),
                             child: Column(children: [
                               Container(
-                                height: height_ / 1.65,
+                                // height: height_ / 1,
                                 width: width_,
                                 decoration: BoxDecoration(
                                     borderRadius:
@@ -149,7 +217,7 @@ class _ticketdetailState extends State<ticketdetail> {
                                   child: Column(
                                     children: [
                                       Container(
-                                        height: height_ / 1.75,
+                                        // height: height_ / 1.50,
                                         decoration: BoxDecoration(
                                             color: whitegrey,
                                             borderRadius: BorderRadius.all(
@@ -378,134 +446,273 @@ class _ticketdetailState extends State<ticketdetail> {
                                                 color: greenn,
                                               ),
                                             ),
-                                            ticketinform['ticked_status'] ==
-                                                    'In Progress'
-                                                ? Container(
-                                                    child: Column(
-                                                      children: [
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: Row(
-                                                            children: [
-                                                              Text(
-                                                                  'Description')
-                                                            ],
-                                                          ),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(8.0),
-                                                          child: DottedBorder(
-                                                            color: greenn,
-                                                            // gap: 3,
-                                                            strokeWidth: 1,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      bottom:
-                                                                          10,
-                                                                      left: 10),
-                                                              child:
-                                                                  TextFormField(
-                                                                controller:
-                                                                    Descriptionctrl,
-                                                                minLines: 2,
-                                                                maxLines: 5,
-                                                                keyboardType:
-                                                                    TextInputType
-                                                                        .multiline,
-                                                                decoration: InputDecoration(
-                                                                    hintText: ticketinform['designation_name'],
-                                                                    // hintStyle: TextStyle(
-                                                                    //     color: Colors.grey),
-                                                                    // border: OutlineInputBorder(
-                                                                    //   borderRadius:
-                                                                    //       BorderRadius.all(
-                                                                    //           Radius.circular(
-                                                                    //               20.0)
-                                                                    //               ),
-                                                                    // ),
-                                                                    border: InputBorder.none),
-                                                              ),
-                                                            ),
-                                                          ),
-                                                        ),
-                                                        SizedBox(
-                                                          height: 5,
-                                                        ),
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          children: [
-                                                            Container(
-                                                              width:
-                                                                  width_ / 1.25,
-                                                              child:
-                                                                  ElevatedButton(
-                                                                style: ElevatedButton
-                                                                    .styleFrom(
-                                                                        primary:
-                                                                            greenn),
-                                                                onPressed: (() {
-                                                                
-                                                                  if(dropdownValue!=null){
-                                                                  senditmsapi();
-                                                                  }
-                                                                  // Navigator.push(
-                                                                  //   context,
-                                                                  //   MaterialPageRoute(
-                                                                  //       builder: (context) =>
-                                                                  //           ticketdetailandattend()),
-                                                                  // );
-                                                                }),
-                                                                child: Text(
-                                                                    'SUBMIT'),
-                                                              ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  )
-                                                : Column(
-                                                    children: [
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Row(
-                                                          children: [
-                                                            Text('History:',
-                                                                style: TextStyle(
-                                                                    fontSize:
-                                                                        15,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .bold))
-                                                          ],
-                                                        ),
+                                            Column(children: [
+                                              Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Row(
+                                                  children: [
+                                                    Text('Image Perviews',
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold))
+                                                  ],
+                                                ),
+                                              )
+                                            ]),
+                                            Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Column(children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(5),
+                                                  height: height_ / 4.5,
+                                                  decoration: BoxDecoration(
+                                                      color: white,
+                                                      border: Border.all(
+                                                        color: whitegrey,
                                                       ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(8.0),
-                                                        child: Column(
-                                                          children: [
-                                                            Text(
-                                                              ticketinform[
-                                                                      'comment']
-                                                                  .toString(),
-                                                            )
-                                                          ],
-                                                        ),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  5))),
+                                                  child: GridView.builder(
+                                                    physics: ScrollPhysics(),
+                                                    itemCount:
+                                                        priviewImageList.length,
+                                                    scrollDirection:
+                                                        Axis.vertical,
+                                                    gridDelegate:
+                                                        SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3,
+                                                            crossAxisSpacing:
+                                                                10,
+                                                            mainAxisSpacing: 5,
+                                                            childAspectRatio:
+                                                                1.8 / 1),
+                                                    itemBuilder:
+                                                        (BuildContext context,
+                                                            int index) {
+                                                      var item =
+                                                          priviewImageList[
+                                                              index];
+                                                      return Stack(
+                                                        alignment:
+                                                            Alignment.topRight,
+                                                        children: [
+                                                          InkWell(
+                                                              onTap: () {},
+                                                              child: Container(
+                                                                  alignment:
+                                                                      Alignment
+                                                                          .center,
+                                                                  decoration: BoxDecoration(
+                                                                      color:
+                                                                          whitegrey,
+                                                                      borderRadius:
+                                                                          BorderRadius.all(Radius.circular(
+                                                                              5))),
+                                                                  child: item.runtimeType ==
+                                                                          String
+                                                                      ? Image
+                                                                          .network(
+                                                                          API().imageURL +
+                                                                              item,
+                                                                          height:
+                                                                              80,
+                                                                          width:
+                                                                              80,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        )
+                                                                      : Image
+                                                                          .file(
+                                                                          File(item
+                                                                              .path),
+                                                                          height:
+                                                                              80,
+                                                                          width:
+                                                                              80,
+                                                                          fit: BoxFit
+                                                                              .cover,
+                                                                        ))),
+                                                          InkWell(
+                                                              onTap: () {
+                                                                setState(() {
+                                                                  priviewImageList
+                                                                      .removeAt(
+                                                                          index);
+                                                                });
+                                                              },
+                                                              child: Icon(
+                                                                  Icons.clear))
+                                                        ],
+                                                      );
+                                                    },
+                                                  ),
+                                                ),
+                                                ticketinform['ticked_status'] ==
+                                                        'Not Resolved'
+                                                    ? Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          ElevatedButton(
+                                                            style: ElevatedButton
+                                                                .styleFrom(
+                                                                    primary:
+                                                                        bluee),
+                                                            onPressed: (() {
+                                                              imagePicker();
+                                                            }),
+                                                            child:
+                                                                Text('Upload'),
+                                                          ),
+                                                        ],
                                                       )
-                                                    ],
-                                                  )
+                                                    : ticketinform[
+                                                                'ticked_status'] ==
+                                                            'In Progress'
+                                                        ? Container(
+                                                            child: Column(
+                                                              children: [
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child: Row(
+                                                                    children: [
+                                                                      Text(
+                                                                          'Description')
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                                Padding(
+                                                                  padding:
+                                                                      const EdgeInsets
+                                                                              .all(
+                                                                          8.0),
+                                                                  child:
+                                                                      DottedBorder(
+                                                                    color:
+                                                                        greenn,
+                                                                    // gap: 3,
+                                                                    strokeWidth:
+                                                                        1,
+                                                                    child:
+                                                                        Padding(
+                                                                      padding: const EdgeInsets
+                                                                              .only(
+                                                                          bottom:
+                                                                              10,
+                                                                          left:
+                                                                              10),
+                                                                      child:
+                                                                          TextFormField(
+                                                                        controller:
+                                                                            Descriptionctrl,
+                                                                        minLines:
+                                                                            2,
+                                                                        maxLines:
+                                                                            5,
+                                                                        keyboardType:
+                                                                            TextInputType.multiline,
+                                                                        decoration: InputDecoration(
+                                                                            hintText: ticketinform['designation_name'],
+                                                                            // hintStyle: TextStyle(
+                                                                            //     color: Colors.grey),
+                                                                            // border: OutlineInputBorder(
+                                                                            //   borderRadius:
+                                                                            //       BorderRadius.all(
+                                                                            //           Radius.circular(
+                                                                            //               20.0)
+                                                                            //               ),
+                                                                            // ),
+                                                                            border: InputBorder.none),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                                SizedBox(
+                                                                  height: 5,
+                                                                ),
+                                                                Row(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .center,
+                                                                  children: [
+                                                                    Container(
+                                                                      width: width_ /
+                                                                          1.25,
+                                                                      child:
+                                                                          ElevatedButton(
+                                                                        style: ElevatedButton.styleFrom(
+                                                                            primary:
+                                                                                greenn),
+                                                                        onPressed:
+                                                                            (() {
+                                                                          if (dropdownValue !=
+                                                                              null) {
+                                                                            senditmsapi();
+                                                                          }
+                                                                          // Navigator.push(
+                                                                          //   context,
+                                                                          //   MaterialPageRoute(
+                                                                          //       builder: (context) =>
+                                                                          //           ticketdetailandattend()),
+                                                                          // );
+                                                                        }),
+                                                                        child: Text(
+                                                                            'SUBMIT'),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          )
+                                                        : Column(
+                                                            children: [
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Row(
+                                                                  children: [
+                                                                    Text(
+                                                                        'History:',
+                                                                        style: TextStyle(
+                                                                            fontSize:
+                                                                                15,
+                                                                            fontWeight:
+                                                                                FontWeight.bold))
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .all(
+                                                                        8.0),
+                                                                child: Column(
+                                                                  children: [
+                                                                    Text(
+                                                                      ticketinform[
+                                                                              'comment']
+                                                                          .toString(),
+                                                                    )
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            ],
+                                                          )
+                                              ]),
+                                            )
                                           ],
                                         ),
                                       ),
@@ -527,5 +734,53 @@ class _ticketdetailState extends State<ticketdetail> {
                       )),
           ),
         ));
+  }
+
+  void imagepickers() async {
+    final url = Uri.parse('${baseUrl}ticket_details');
+    var res = await http.post(url, headers: <String, String>{
+      'x-api-key': token,
+    });
+    var request = http.MultipartRequest('POST', url);
+
+    request.headers['Content-type'] = 'application/json';
+    request.headers['Accept'] = 'application/json';
+
+    List<http.MultipartFile> clusterList = [];
+
+    for (int i = 0; i < priviewImageList.length; i++) {
+      if (priviewImageList[i].runtimeType == String) {
+        var singleImage = await http.MultipartFile.fromString(
+            'exterior_three[]', priviewImageList[i].toString());
+        clusterList.add(singleImage);
+      } else {
+        var singleImage = http.MultipartFile.fromBytes('exterior_three[]',
+            File(priviewImageList[i].path).readAsBytesSync(),
+            filename: priviewImageList[i].path);
+        // await http.MultipartFile.fromPath(
+        //     'exterior_three', clusterMeterImageList[i].path.toString());
+        clusterList.add(singleImage);
+      }
+    }
+    request.files.addAll(clusterList);
+    // for (int i = 0; i < scratchesPaintImageList.length; i++) {
+    //   var singleImage = await http.MultipartFile.fromPath(
+    //       'photo', scratchesPaintImageList[i]);
+    //   request.files.add(singleImage);
+    // }
+    print(request.fields);
+    print(request.files);
+    var response = await http.Response.fromStream(await request.send());
+    if (response == null) return;
+    final responseString = await response.body;
+    var data = json.decode(responseString);
+
+    // hideLoading();
+    // if (data['Status'] == "Success") {
+    //   getAllDetailsBasedOnRequestID(serviceFullDetails['service_request_id']);
+    //   Fluttertoast.showToast(msg: data['message']);
+    // } else {
+    //   Fluttertoast.showToast(msg: data['message']);
+    // }
   }
 }

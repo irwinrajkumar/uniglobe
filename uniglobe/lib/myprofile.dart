@@ -92,7 +92,9 @@ class _myprofileState extends State<myprofile> {
       // ImagePickerController.text = croppedFile.path;
       print(_image!.path);
     });
-    uploadProfile();
+    if (_image != null) {
+      uploadProfile(_image!);
+    }
   }
 
   var new_pic = [];
@@ -150,16 +152,22 @@ class _myprofileState extends State<myprofile> {
                       const SizedBox(height: 20),
                       Container(
                           child: Stack(children: [
-                        _image == null
-                            ? Image(
-                                image: AssetImage(
-                                "assets/myprofile.png",
-                              ))
-                            : ClipOval(
-                                child: Image.file(_image!,
-                                    height: 200,
-                                    width: 200,
-                                    fit: BoxFit.cover)),
+                        ClipOval(
+                            child: _image != null
+                                ? Image.file(_image!,
+                                    height: 100, width: 100, fit: BoxFit.cover)
+                                : (profile != null &&
+                                        profile['profile_image'].toString() !=
+                                            "null")
+                                    ? Image.network(
+                                        profile['profile_image'].toString(),
+                                        height: 100,
+                                        width: 100,
+                                        fit: BoxFit.cover)
+                                    : Image(
+                                        image: AssetImage(
+                                        "assets/myprofile.png",
+                                      ))),
                         Positioned(
                           right: 1 / 1,
                           child: InkWell(
@@ -243,21 +251,14 @@ class _myprofileState extends State<myprofile> {
                                 ),
                               );
                             },
-                            child: Center(
-                              child: profile != null &&
-                                      profile['profile_image'].toString() != ''
-                                  ? Image(
-                                      width: 120,
-                                      height: 120,
-                                      image: NetworkImage(
-                                      profile['profile_image'].toString(),
-                                    ),fit: BoxFit.cover,)
-                                  : Image(
-                                      // color: Colors.white,
-                                      image: AssetImage(
-                                      "assets/Group 420.png",
-                                    )),
-                            ),
+                            child: Image(
+                                height: 20,
+                                width: 20,
+                                fit: BoxFit.cover,
+                                // color: Colors.white,
+                                image: AssetImage(
+                                  "assets/Group 420.png",
+                                )),
                           ),
                         ),
                       ])),
@@ -439,7 +440,7 @@ class _myprofileState extends State<myprofile> {
     );
   }
 
-  Future<void> uploadProfile() async {
+  Future<void> uploadProfile(File images) async {
     var baseurl = '${baseUrl}uploadProfile';
     final uri = Uri.parse(baseurl);
     var request = http.MultipartRequest('POST', uri);
@@ -461,7 +462,7 @@ class _myprofileState extends State<myprofile> {
     if (_image != null) {
       print('$_image  mypic');
       firstimage =
-          await http.MultipartFile.fromPath('profile_image', _image!.path);
+          await http.MultipartFile.fromPath('profile_image', images.path);
       request.files.add(firstimage);
     }
     //     await http.MultipartFile.fromPath('profile_image', _image!.path);

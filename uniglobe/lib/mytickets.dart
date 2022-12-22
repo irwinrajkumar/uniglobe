@@ -163,7 +163,7 @@ class _myticketsState extends State<mytickets> {
                                           ),
                                           hintText: 'From Date',
                                           hintStyle: const TextStyle(
-                                              fontSize: 1,
+                                              fontSize: 10,
                                               height: 0.9,
                                               fontFamily: 'Exo2',
                                               color: Colors.black),
@@ -339,7 +339,9 @@ class _myticketsState extends State<mytickets> {
                         ],
                       ),
                       Padding(
-                          padding: const EdgeInsets.only(right: 20,),
+                          padding: const EdgeInsets.only(
+                            right: 20,
+                          ),
                           child: Column(children: [
                             Container(
                                 height: height_ / 1.43,

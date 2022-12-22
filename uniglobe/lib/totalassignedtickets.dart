@@ -28,7 +28,7 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
   @override
   void initState() {
     super.initState();
-    totaldata('','');
+    totaldata('', '');
   }
 
   var fetchdata = [];
@@ -394,22 +394,52 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
                                                         height: 10,
                                                       ),
                                                       Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
                                                         children: [
-                                                          Text(
-                                                            "Assigned No: ",
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: Colors
-                                                                    .black),
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "Assigned No: ",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              Text(
+                                                                fetchdata[index]
+                                                                        [
+                                                                        'ticket_raised_dt']
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color:
+                                                                        greenn),
+                                                              ),
+                                                            ],
                                                           ),
-                                                          Text(
-                                                            fetchdata[index][
-                                                                    'ticket_raised_dt']
-                                                                .toString(),
-                                                            style: TextStyle(
-                                                                fontSize: 12,
-                                                                color: greenn),
-                                                          ),
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                fetchdata[index]
+                                                                        [
+                                                                        'ticked_status']
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color:
+                                                                        greenn),
+                                                              ),
+                                                              Image.asset(
+                                                                "assets/tick.png",
+                                                                width: 20,
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
                                                       ),
                                                     ],
