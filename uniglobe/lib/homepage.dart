@@ -185,7 +185,6 @@ class _homeState extends State<home> {
                                       // fit: BoxFit.contain
                                     ),
                                     const Spacer(),
-
                                     SizedBox(
                                       width: width_ / 2.6,
                                       child: Text(
@@ -201,15 +200,6 @@ class _homeState extends State<home> {
                                         ),
                                       ),
                                     ),
-
-                                    // Text(
-                                    //   'Assigned Tickets',
-                                    //   style: const TextStyle(
-                                    //       fontSize: 15,
-                                    //       fontFamily: "Exo2",
-                                    //       color: greenn,
-                                    //       fontWeight: FontWeight.w900),
-                                    // ),
                                     const Spacer(),
                                   ],
                                   //     ),
