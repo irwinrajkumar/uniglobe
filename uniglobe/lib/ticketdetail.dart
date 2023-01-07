@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:uniglobe/todaysassignedtickets.dart';
@@ -40,10 +39,12 @@ class _ticketdetailState extends State<ticketdetail> {
   var inventory = [];
   var exteriorsList = [];
   var priviewImageList = [];
+  var ticketimg = [];
   String? dropdownValue;
   var ticketinform;
   var status;
   bool ticket = false;
+
   ticketapi() async {
     var url = Uri.parse('${baseUrl}ticket_details');
     var res = await http.post(url, headers: <String, String>{
@@ -62,16 +63,54 @@ class _ticketdetailState extends State<ticketdetail> {
     });
   }
 
+  ticketimageapi() async {
+    var url = Uri.parse('${baseimageupload}fetch_service_img.php');
+    var res = await http.post(url, headers: <String, String>{
+      'x-api-key': token,
+    }, body: {
+      'ticket': '${widget.ticketNumber}',
+    });
+    var decodeValue = json.decode(res.body);
+    setState(() {
+      // ticket = false;
+      if (decodeValue["status"] == "Succcess") {
+        priviewImageList = decodeValue['Image List'] ?? [];
+      }
+
+      print(decodeValue['Image List']);
+    });
+  }
+
   senditmsapi() async {
-    var url = Uri.parse('${baseUrl}update_ticket_detail');
+    var url = Uri.parse('${baseimageupload}update_ticket_detail.php');
     var request = http.MultipartRequest('POST', url);
     request.headers.addAll(
       {"Content-type": "application/x-www-form-urlencoded", 'x-api-key': token},
     );
+
     request.fields['ticket_number'] = '${widget.ticketNumber}';
     request.fields['ticket_status'] = dropdownValue!;
-
     request.fields['ticket_comment'] = Descriptionctrl.text.toString();
+
+    List<http.MultipartFile> clusterList = [];
+
+    for (int i = 0; i < priviewImageList.length; i++) {
+      if (priviewImageList[i].runtimeType.toString() == "_File" ||
+          priviewImageList[i].runtimeType == XFile) {
+        //   var singleImage = await http.MultipartFile.fromString(
+        //       'image[]', priviewImageList[i].toString());
+        //   clusterList.add(singleImage);
+        // } else {
+        var singleImage = http.MultipartFile.fromBytes(
+            'image[]', File(priviewImageList[i].path).readAsBytesSync(),
+            filename: priviewImageList[i].path);
+
+        clusterList.add(singleImage);
+      }
+    }
+
+    request.files.addAll(clusterList);
+
     var response = await request.send();
     final respStr = await response.stream.bytesToString();
     var data = json.decode(respStr);
@@ -91,6 +130,7 @@ class _ticketdetailState extends State<ticketdetail> {
   @override
   void initState() {
     ticketapi();
+    ticketimageapi();
     super.initState();
   }
 
@@ -98,9 +138,10 @@ class _ticketdetailState extends State<ticketdetail> {
     final image = await ImagePicker().pickImage(source: ImageSource.camera);
     if (image == null) return;
     final imageTemporary = File(image.path);
+    priviewImageList.add(imageTemporary);
+    print(imageTemporary.runtimeType);
     setState(() {
       Get.back();
-      priviewImageList.add(imageTemporary);
     });
   }
 
@@ -113,6 +154,11 @@ class _ticketdetailState extends State<ticketdetail> {
     setState(() {
       Get.back();
     });
+    if (priviewImageList.isNotEmpty) {
+      // imageList.add(_image);
+
+      // imagepickers();
+    }
   }
 
   imagePicker() {
@@ -504,51 +550,55 @@ class _ticketdetailState extends State<ticketdetail> {
                                                             Alignment.topRight,
                                                         children: [
                                                           InkWell(
-                                                              onTap: () {},
-                                                              child: Container(
-                                                                  alignment:
-                                                                      Alignment
-                                                                          .center,
-                                                                  decoration: BoxDecoration(
-                                                                      color:
-                                                                          whitegrey,
-                                                                      borderRadius:
-                                                                          BorderRadius.all(Radius.circular(
+                                                            onTap: () {},
+                                                            child: Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              decoration: BoxDecoration(
+                                                                  color:
+                                                                      whitegrey,
+                                                                  borderRadius:
+                                                                      BorderRadius.all(
+                                                                          Radius.circular(
                                                                               5))),
-                                                                  child: item.runtimeType ==
-                                                                          String
-                                                                      ? Image
-                                                                          .network(
-                                                                          API().imageURL +
-                                                                              item,
-                                                                          height:
-                                                                              80,
-                                                                          width:
-                                                                              80,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        )
-                                                                      : Image
-                                                                          .file(
-                                                                          File(item
-                                                                              .path),
-                                                                          height:
-                                                                              80,
-                                                                          width:
-                                                                              80,
-                                                                          fit: BoxFit
-                                                                              .cover,
-                                                                        ))),
-                                                          InkWell(
-                                                              onTap: () {
-                                                                setState(() {
-                                                                  priviewImageList
-                                                                      .removeAt(
-                                                                          index);
-                                                                });
-                                                              },
-                                                              child: Icon(
-                                                                  Icons.clear))
+                                                              child: item.runtimeType
+                                                                              .toString() !=
+                                                                          "_File" &&
+                                                                      item.runtimeType !=
+                                                                          XFile
+                                                                  ? Image
+                                                                      .network(
+                                                                      baseUrlimage +
+                                                                          item[
+                                                                              'service_image'],
+                                                                      height:
+                                                                          80,
+                                                                      width: 80,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    )
+                                                                  : Image.file(
+                                                                      File(item
+                                                                          .path),
+                                                                      height:
+                                                                          80,
+                                                                      width: 80,
+                                                                      fit: BoxFit
+                                                                          .cover,
+                                                                    ),
+                                                            ),
+                                                          ),
+                                                          // InkWell(
+                                                          //     onTap: () {
+                                                          //       setState(() {
+                                                          //         priviewImageList
+                                                          //             .removeAt(
+                                                          //                 index);
+                                                          //       });
+                                                          //     },
+                                                          //     child: Icon(
+                                                          //         Icons.clear))
                                                         ],
                                                       );
                                                     },
@@ -571,8 +621,8 @@ class _ticketdetailState extends State<ticketdetail> {
                                                             onPressed: (() {
                                                               imagePicker();
                                                             }),
-                                                            child:
-                                                                Text('Upload'),
+                                                            child: Text(
+                                                                'Choose File'),
                                                           ),
                                                         ],
                                                       )
@@ -730,51 +780,38 @@ class _ticketdetailState extends State<ticketdetail> {
         ));
   }
 
-  void imagepickers() async {
-    final url = Uri.parse('${baseUrl}ticket_details');
-    var res = await http.post(url, headers: <String, String>{
-      'x-api-key': token,
-    });
-    var request = http.MultipartRequest('POST', url);
+  // void imagepickers() async {
+  //   final url = Uri.parse('${baseUrl}ticket_details');
+  //   var res = await http.post(url, headers: <String, String>{
+  //     'x-api-key': token,
+  //   });
+  //   var request = http.MultipartRequest('POST', url);
 
-    request.headers['Content-type'] = 'application/json';
-    request.headers['Accept'] = 'application/json';
+  //   request.headers['Content-type'] = 'application/json';
+  //   request.headers['Accept'] = 'application/json';
 
-    List<http.MultipartFile> clusterList = [];
+  //   List<http.MultipartFile> clusterList = [];
 
-    for (int i = 0; i < priviewImageList.length; i++) {
-      if (priviewImageList[i].runtimeType == String) {
-        var singleImage = await http.MultipartFile.fromString(
-            'exterior_three[]', priviewImageList[i].toString());
-        clusterList.add(singleImage);
-      } else {
-        var singleImage = http.MultipartFile.fromBytes('exterior_three[]',
-            File(priviewImageList[i].path).readAsBytesSync(),
-            filename: priviewImageList[i].path);
-        // await http.MultipartFile.fromPath(
-        //     'exterior_three', clusterMeterImageList[i].path.toString());
-        clusterList.add(singleImage);
-      }
-    }
-    request.files.addAll(clusterList);
-    // for (int i = 0; i < scratchesPaintImageList.length; i++) {
-    //   var singleImage = await http.MultipartFile.fromPath(
-    //       'photo', scratchesPaintImageList[i]);
-    //   request.files.add(singleImage);
-    // }
-    print(request.fields);
-    print(request.files);
-    var response = await http.Response.fromStream(await request.send());
-    if (response == null) return;
-    final responseString = await response.body;
-    var data = json.decode(responseString);
+  //   for (int i = 0; i < priviewImageList.length; i++) {
+  //     if (priviewImageList[i].runtimeType == String) {
+  //       var singleImage = await http.MultipartFile.fromString(
+  //           'exterior_three[]', priviewImageList[i].toString());
+  //       clusterList.add(singleImage);
+  //     } else {
+  //       var singleImage = http.MultipartFile.fromBytes('exterior_three[]',
+  //           File(priviewImageList[i].path).readAsBytesSync(),
+  //           filename: priviewImageList[i].path);
 
-    // hideLoading();
-    // if (data['Status'] == "Success") {
-    //   getAllDetailsBasedOnRequestID(serviceFullDetails['service_request_id']);
-    //   Fluttertoast.showToast(msg: data['message']);
-    // } else {
-    //   Fluttertoast.showToast(msg: data['message']);
-    // }
-  }
+  //       clusterList.add(singleImage);
+  //     }
+  //   }
+  //   request.files.addAll(clusterList);
+
+  //   print(request.fields);
+  //   print(request.files);
+  //   var response = await http.Response.fromStream(await request.send());
+  //   if (response == null) return;
+  //   final responseString = await response.body;
+  //   var data = json.decode(responseString);
+  // }
 }

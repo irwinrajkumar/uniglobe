@@ -214,6 +214,58 @@ class _pendingticketsState extends State<pendingtickets> {
                                                             )
                                                           ],
                                                         ),
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          "Branch Name : ",
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color:
+                                                                  Colors.black),
+                                                        ),
+                                                        Text(
+                                                          fetchdata[index][
+                                                                  'branch_name']
+                                                              .toString(),
+                                                          style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: greenn),
+                                                        )
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Location : ",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                            Text(
+                                                              fetchdata[index][
+                                                                      'location']
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color:
+                                                                      greenn),
+                                                            ),
+                                                          ],
+                                                        ),
                                                         Row(
                                                           children: [
                                                             Text(
@@ -261,7 +313,7 @@ class _pendingticketsState extends State<pendingtickets> {
     }, body: {
       'user_id': '$userID',
     });
-   print("Invalid Credintials");
+    print("Invalid Credintials");
     // }
     var decodeValue = json.decode(response.body);
     setState(() {

@@ -32,6 +32,13 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
   }
 
   var fetchdata = [];
+  String dropdownvalue = 'All';
+  var items = [
+    'All',
+    'Pending',
+    'Resolved',
+    'Not Resolved',
+  ];
   @override
   // DateTime _fromdateTime = DateTime.now();
   DateTime date = DateTime(1900, 07, 28);
@@ -110,7 +117,7 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
                               child: Container(
                                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 width: width_ / 2.3,
-                                height: height_ / 8,
+                                height: height_ / 10,
                                 child: TextField(
                                   controller: _fromdateTimecontroller,
                                   keyboardType: TextInputType.number,
@@ -188,7 +195,7 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
                               child: Container(
                                 margin: const EdgeInsets.fromLTRB(0, 0, 0, 0),
                                 width: width_ / 2.3,
-                                height: height_ / 8,
+                                height: height_ / 10,
                                 child: TextField(
                                   controller: _endateTimecontroller,
                                   keyboardType: TextInputType.number,
@@ -259,7 +266,52 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
                               width: 10,
                             ),
                           ],
-                        )
+                        ),
+                        Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(
+                                bottom: 12,
+                              ),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 1, color: Colors.grey)),
+                                child: Padding(
+                                  padding: const EdgeInsets.all(2),
+                                  child: SizedBox(
+                                    width: 160,
+                                    child: DropdownButton<String>(
+                                      // Initial Value
+                                      value: dropdownvalue,
+
+                                      // Down Arrow Icon
+                                      icon:
+                                          const Icon(Icons.keyboard_arrow_down),
+
+                                      // Array list of items
+                                      items: items.map((String items) {
+                                        return DropdownMenuItem(
+                                          value: items,
+                                          child: Text(items),
+                                        );
+                                      }).toList(),
+                                      // After selecting the desired option,it will
+                                      // change button value to selected value
+                                      onChanged: (String? newValue) {
+                                        setState(() {
+                                          dropdownvalue = newValue!;
+                                        });
+                                        totaldata(_fromdateTimecontroller.text,
+                                            _endateTimecontroller.text);
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
                         // Row(
                         //   children: [
                         //     Text(
@@ -421,6 +473,61 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
                                                               ),
                                                             ],
                                                           ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            "Branch Name : ",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          Text(
+                                                            fetchdata[index][
+                                                                    'branch_name']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: greenn),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 5,
+                                                      ),
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "Location : ",
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color: Colors
+                                                                        .black),
+                                                              ),
+                                                              Text(
+                                                                fetchdata[index]
+                                                                        [
+                                                                        'location']
+                                                                    .toString(),
+                                                                style: TextStyle(
+                                                                    fontSize:
+                                                                        12,
+                                                                    color:
+                                                                        greenn),
+                                                              ),
+                                                            ],
+                                                          ),
                                                           Row(
                                                             children: [
                                                               Text(
@@ -471,6 +578,13 @@ class _totalassignedticketsState extends State<totalassignedtickets> {
       'user_id': '$userID',
       'from_date': formdate,
       'to_date': todate,
+      'ticket_type': dropdownvalue == 'Pending'
+          ? '1'
+          : dropdownvalue == 'Resolved'
+              ? '2'
+              : dropdownvalue == 'Not Resolved'
+                  ? '3'
+                  : ''
     });
 
     var decodeValue = json.decode(response.body);

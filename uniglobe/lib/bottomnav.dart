@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'package:circular_bottom_navigation/tab_item.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +10,9 @@ import 'package:uniglobe/color%20code.dart';
 import 'package:uniglobe/homepage.dart';
 import 'package:uniglobe/login.dart';
 import 'package:uniglobe/mytickets.dart';
-
+import 'package:http/http.dart' as http;
 import 'changepassword.dart';
+import 'main.dart';
 import 'todaysassignedtickets.dart';
 import 'myprofile.dart';
 // import 'package:uniglobe/homepage.dart';
@@ -133,6 +135,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    user();
     initFunction();
   }
 
@@ -145,6 +148,7 @@ class _DrawerWidgetState extends State<DrawerWidget> {
     });
   }
 
+  var profile1;
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -171,11 +175,14 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                   children: [
                     Row(
                       children: [
-                        Image(
-                          image: AssetImage(
-                            'assets/man.png',
-                          ),
-                        ),
+                        profile1 != null && profile1['profile_image'] != null
+                            ? Image.network(profile1['profile_image'],
+                                fit: BoxFit.cover, height: 60.0, width: 60.0)
+                            : Image(
+                                image: AssetImage(
+                                  'assets/man.png',
+                                ),
+                              ),
                         SizedBox(
                           width: 10,
                         ),
@@ -352,7 +359,8 @@ class _DrawerWidgetState extends State<DrawerWidget> {
                                   ),
                                   actions: [
                                     Padding(
-                                      padding: const EdgeInsets.only(bottom: 10),
+                                      padding:
+                                          const EdgeInsets.only(bottom: 10),
                                       child: Divider(
                                         height: 0,
                                         thickness: 1,
@@ -530,5 +538,24 @@ class _DrawerWidgetState extends State<DrawerWidget> {
       //   backgroundColor: Color.fromARGB(255, 238, 237, 237),
       //   // drawer: NavBar(),
     );
+  }
+
+  Future<void> user() async {
+    var baseurl = '${baseUrl}user';
+    SharedPreferences pref = await SharedPreferences.getInstance();
+    var userID = pref.getString('userid');
+    var url = Uri.parse(baseurl);
+    final response = await http.post(url, headers: <String, String>{
+      'x-api-key': token,
+    }, body: {
+      'user_id': '$userID',
+    });
+    print('$userID');
+    var decodeValue = json.decode(response.body);
+    setState(() {
+      if (decodeValue["data"].length != 0) {
+        profile1 = decodeValue["data"][0];
+      }
+    });
   }
 }

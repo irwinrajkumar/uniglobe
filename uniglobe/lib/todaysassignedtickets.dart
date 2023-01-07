@@ -31,6 +31,7 @@ class _todaysassignedtocketsState extends State<todaysassignedtockets> {
 
   var fetchdata = [];
 
+
   @override
   Widget build(BuildContext context) {
     mediaSize(context);
@@ -84,160 +85,152 @@ class _todaysassignedtocketsState extends State<todaysassignedtockets> {
                           padding: const EdgeInsets.only(right: 20, top: 40),
                           child: Column(children: [
                             Container(
-                                height: height_ / 1.43,
-                                width: width_,
-                                decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(5)),
-                                    border: Border.all(color: greenn)),
-                                child: Container(
-                                    // height: Get.height / 1.7,
-                                    height: height_ / 1.55,
-                                    // width: 360,
-                                    child: ListView.builder(
-                                        itemCount: fetchdata.length,
-                                        shrinkWrap: true,
-                                        // physics: NeverScrollableScrollPhysics(),
-                                        itemBuilder: (context, index) {
-                                          return Column(
-                                            children: [
-                                              SizedBox(
-                                                height: 10,
-                                              ),
-                                              GestureDetector(
-                                                onTap: () {},
-                                                child: Container(
-                                                  width: width_ / 1.2,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  0)),
-                                                      color: Colors.white,
-                                                      boxShadow: [
-                                                        new BoxShadow(
-                                                          color: Colors.black,
-                                                          blurRadius: 1.0,
-                                                        ),
-                                                      ]),
-                                                  // color: Colors.white,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            10.0),
-                                                    child: Column(
-                                                      children: [
-                                                        Row(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .spaceBetween,
-                                                          children: [
-                                                            Row(
-                                                              children: [
-                                                                Text(
-                                                                  "Ticket No: ",
-                                                                  style:
-                                                                      TextStyle(
+                              height: height_ / 1.43,
+                              width: width_,
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  border: Border.all(color: greenn)),
+                              child: Container(
+                                  // height: Get.height / 1.7,
+                                  height: height_ / 1.55,
+                                  // width: 360,
+                                  child: ListView.builder(
+                                      itemCount: fetchdata.length,
+                                      shrinkWrap: true,
+                                      // physics: NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        return Column(
+                                          children: [
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {},
+                                              child: Container(
+                                                width: width_ / 1.2,
+                                                decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(0)),
+                                                    color: Colors.white,
+                                                    boxShadow: [
+                                                      new BoxShadow(
+                                                        color: Colors.black,
+                                                        blurRadius: 1.0,
+                                                      ),
+                                                    ]),
+                                                // color: Colors.white,
+                                                child: Padding(
+                                                  padding: const EdgeInsets.all(
+                                                      10.0),
+                                                  child: Column(
+                                                    children: [
+                                                      Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceBetween,
+                                                        children: [
+                                                          Row(
+                                                            children: [
+                                                              Text(
+                                                                "Ticket No: ",
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 12,
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                fetchdata[index]
+                                                                        [
+                                                                        'ticket_number']
+                                                                    .toString(),
+                                                                style: TextStyle(
                                                                     fontSize:
                                                                         12,
-                                                                  ),
-                                                                ),
-                                                                Text(
-                                                                  fetchdata[index]
-                                                                          [
-                                                                          'ticket_number']
-                                                                      .toString(),
-                                                                  style: TextStyle(
-                                                                      fontSize:
-                                                                          12,
-                                                                      color:
-                                                                          greenn),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            InkWell(
-                                                              onTap: () {
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          ticketdetail(
-                                                                              ticketNumber: fetchdata[index]['ticket_number'].toString())),
-                                                                );
-                                                              },
-                                                              child: Text(
-                                                                'View',
-                                                                style: TextStyle(
-                                                                    color: Colors
-                                                                        .grey),
+                                                                    color:
+                                                                        greenn),
                                                               ),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              "Ticket Tittle: ",
+                                                            ],
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(
+                                                                    builder: (context) =>
+                                                                        ticketdetail(
+                                                                            ticketNumber:
+                                                                                fetchdata[index]['ticket_number'].toString())),
+                                                              );
+                                                            },
+                                                            child: Text(
+                                                              'View',
                                                               style: TextStyle(
-                                                                  fontSize: 12,
                                                                   color: Colors
-                                                                      .black),
+                                                                      .grey),
                                                             ),
-                                                            Text(
-                                                              fetchdata[index][
-                                                                      'ticket_title']
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      greenn),
-                                                            )
-                                                          ],
-                                                        ),
-                                                        SizedBox(
-                                                          height: 10,
-                                                        ),
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              "Assigned No: ",
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color: Colors
-                                                                      .black),
-                                                            ),
-                                                            Text(
-                                                              fetchdata[index][
-                                                                      'ticket_raised_dt']
-                                                                  .toString(),
-                                                              style: TextStyle(
-                                                                  fontSize: 12,
-                                                                  color:
-                                                                      greenn),
-                                                            )
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    ),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            "Ticket Tittle: ",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          Text(
+                                                            fetchdata[index][
+                                                                    'ticket_title']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: greenn),
+                                                          )
+                                                        ],
+                                                      ),
+                                                      SizedBox(
+                                                        height: 10,
+                                                      ),
+                                                      Row(
+                                                        children: [
+                                                          Text(
+                                                            "Assigned No: ",
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: Colors
+                                                                    .black),
+                                                          ),
+                                                          Text(
+                                                            fetchdata[index][
+                                                                    'ticket_raised_dt']
+                                                                .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 12,
+                                                                color: greenn),
+                                                          )
+                                                        ],
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-
-                                                //
                                               ),
-                                              SizedBox(
-                                                height: 10,
-                                              )
-                                            ],
-                                          );
-                                        }
-                                        )
-                                        ),
-                                        
-                                        ),
-                                        
+
+                                              //
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            )
+                                          ],
+                                        );
+                                      })),
+                            ),
                           ]))
                     ])))));
   }
@@ -254,11 +247,12 @@ class _todaysassignedtocketsState extends State<todaysassignedtockets> {
     });
 
     var decodeValue = json.decode(response.body);
-    if (mounted)
-       {
-        setState(() {
-          fetchdata = decodeValue["data"]["today_ticket"];
-        });
-      };
+    if (mounted) {
+      setState(() {
+        fetchdata = decodeValue["data"]["today_ticket"];
+      });
+    }
+    ;
   }
+  
 }

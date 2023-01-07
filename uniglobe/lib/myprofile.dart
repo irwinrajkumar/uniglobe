@@ -443,6 +443,7 @@ class _myprofileState extends State<myprofile> {
   Future<void> uploadProfile(File images) async {
     var baseurl = '${baseUrl}uploadProfile';
     final uri = Uri.parse(baseurl);
+
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll(
@@ -451,16 +452,16 @@ class _myprofileState extends State<myprofile> {
         'X-API-KEY': 'uniglobe@123'
       },
     );
+
     var pref = await SharedPreferences.getInstance();
-    var regId = pref.getString('customer_Id');
-    request.fields['reg_id'] = regId.toString();
+    var regId = pref.getString('userid');
+    request.fields['customer_id'] = regId.toString();
 
     print(regId);
     var firstimage;
     //  SharedPreferences pref = await SharedPreferences.getInstance();
 
     if (_image != null) {
-      print('$_image  mypic');
       firstimage =
           await http.MultipartFile.fromPath('profile_image', images.path);
       request.files.add(firstimage);

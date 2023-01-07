@@ -157,10 +157,11 @@ class _completedticketsState extends State<completedtickets> {
                                                                 Navigator.push(
                                                                   context,
                                                                   MaterialPageRoute(
-                                                                      builder: (context) =>
-                                                                          ticketdetail(
-                                                                            type:"Complete",
-                                                                              ticketNumber: fetchdata[index]['ticket_number'].toString())),
+                                                                      builder: (context) => ticketdetail(
+                                                                          type:
+                                                                              "Complete",
+                                                                          ticketNumber:
+                                                                              fetchdata[index]['ticket_number'].toString())),
                                                                 );
                                                               },
                                                               child: Text(
@@ -217,6 +218,62 @@ class _completedticketsState extends State<completedtickets> {
                                                                   fetchdata[index]
                                                                           [
                                                                           'ticket_raised_dt']
+                                                                      .toString(),
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color:
+                                                                          greenn),
+                                                                )
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text(
+                                                              "Branch Name: ",
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color: Colors
+                                                                      .black),
+                                                            ),
+                                                            Text(
+                                                              fetchdata[index][
+                                                                      'branch_name']
+                                                                  .toString(),
+                                                              style: TextStyle(
+                                                                  fontSize: 12,
+                                                                  color:
+                                                                      greenn),
+                                                            )
+                                                          ],
+                                                        ),
+                                                        SizedBox(
+                                                          height: 5,
+                                                        ),
+                                                        Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .spaceBetween,
+                                                          children: [
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  "Location: ",
+                                                                  style: TextStyle(
+                                                                      fontSize:
+                                                                          12,
+                                                                      color: Colors
+                                                                          .black),
+                                                                ),
+                                                                Text(
+                                                                  fetchdata[index]
+                                                                          [
+                                                                          'location']
                                                                       .toString(),
                                                                   style: TextStyle(
                                                                       fontSize:
